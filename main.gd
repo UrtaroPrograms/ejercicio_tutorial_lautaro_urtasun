@@ -15,11 +15,15 @@ func _process(delta: float):
 func game_over():
 	$ScoreTimer.stop()
 	$MobTimer.stop()
+	$HUD.show_game_over()
 	
 func new_game():
+	get_tree().call_group("mobs", "queue_free")
 	puntos = 0
 	$Player.start($StartPosition.position)
 	$StartTimer.start()
+	$HUD.update_score(puntos)
+	$HUD.show_message("Get Ready")
 
 func _on_mob_timer_timeout():
 	var mob = escena_mob.instantiate()
@@ -41,7 +45,7 @@ func _on_mob_timer_timeout():
 
 func _on_score_timer_timeout():
 	puntos += 1
-
+	$HUD.update_score(puntos)
 
 func _on_start_timer_timeout():
 	$MobTimer.start()
